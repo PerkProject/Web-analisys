@@ -1,0 +1,53 @@
+%h4
+  Добро пожаловать!
+%p
+  - if request.env['HTTP_REFERER'].nil?
+    Вы перешли по прямой ссылке
+  - else 
+    Вы пришли с сайта:    
+    = request.env['HTTP_REFERER']
+%p
+  Ваш IP-адрес 
+  = request.env['HTTP_X_FORWARDED_FOR']
+%p
+  - if params[:query].nil? 
+    Вы относитесь к категории остальные
+  - else 
+    Имя партнера: 
+    = params[:query]
+%p 
+  Браузер: 
+  = request.env['HTTP_USER_AGENT']
+
+%div{:class => 'graphic'}
+  %p
+    = pie_chart @data_pie, library: @option_pie
+  %p
+    = line_chart @data_line, library: @option_line
+
+
+%h4
+  %center
+    Данные последних 100 посещений
+%table
+  %thead
+    %tr
+      %th 
+        Категория
+      %th 
+        IP - адрес
+      %th 
+        Браузер
+      %th 
+        Время посещения
+  - @table_data.each do |data| 
+    %tr
+      %td 
+        = data.name
+      %td
+        = data.ip
+      %td
+        = data.browser
+      %td
+        = data.created_at
+  
